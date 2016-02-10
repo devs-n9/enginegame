@@ -85,9 +85,44 @@
         },
 
         level: {
+            world: null,
+            components: [],
+            start: function(config){
+                this.world = config.world;
+                this.components = config.components;
+                var level = this.getLevel(1);
+                this.createLevel(level);
+            },
             getLevel: function (level) {
-
+                return [
+                    [0, 0, 0, 1, 0, 2],
+                    [0, 0, 0, 1, 0, 2],
+                    [0, 0, 1, 1, 0, 2],
+                    [0, 2, 2, 1, 0, 2]
+                ];
+            },
+            createLevel: function(level){
+                var item = null;
+                var world = document.getElementById(gameEngine.level.world);
+                
+                for(var x = 0; x < level.length; x++){
+                    for(var y = 0; y < level[x].length; y++){
+                        console.log(level[x].length, y + 1);
+                        
+                        item = document.createElement('div');
+                        item.setAttribute('class', 'item');
+                        item.style.backgroundColor = "red";
+                        world.appendChild(item);
+                        
+                        if(level[x].length == y + 1){
+                            
+                            item.style.clear = "both";
+                        }
+//                        level.components[level[x][y]];
+                    }
+                }
             }
+            
         }
     }
     window.$game = gameEngine;

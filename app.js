@@ -6,5 +6,10 @@
     });
 
     $game.controles.init($game.player, {
-        speed: 
+        speed: 4
+    });
+    
+    $game.level.start({
+        world: 'game',
+        components: []
     });
