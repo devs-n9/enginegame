@@ -1,78 +1,94 @@
-var Game = function Game() {
-    var self = this;
-    self.controles = {
-        left: 39,
-        right: 37,
-        top: 38,
-        player: null,
-        iterator: 50,
-        speed: 5,
+(function () {
+    var gameEngine = {
+        controles: {
+            left: 39,
+            right: 37,
+            top: 38,
+            player: null,
+            iterator: 50,
+            speed: 5,
 
-        init: function (player, config) {
-            for(var param in config){
-                if (config[param] !== undefined) {
-                    self.controles[param] = config[param];
+            init: function (player, config) {
+                for (var param in config) {
+                    console.log(config);
+                    if (config[param] !== undefined) {
+                        gameEngine.controles[param] = config[param];
+                    }
                 }
+                gameEngine.controles.player = player;
+
+                document.addEventListener("keydown", gameEngine.controles.onAction);
+                document.addEventListener("keyup", gameEngine.controles.onStop);
+            },
+
+            onAction: function (e) {
+
+                if (e.keyCode == gameEngine.controles.left) {
+                    gameEngine.controles.iterator += gameEngine.controles.speed;
+                    gameEngine.player.character.style.transform = 'scale(1, 1)';
+                    gameEngine.player.run();
+                }
+
+                if (e.keyCode == gameEngine.controles.right) {
+                    gameEngine.controles.iterator -= gameEngine.controles.speed;
+                    gameEngine.player.character.style.transform = 'scale(-1, 1)';
+                    gameEngine.player.run();
+                }
+
+                if (e.keyCode == gameEngine.controles.top) {
+                    gameEngine.player.character.setAttribute('class', "jump");
+                    gameEngine.player.jump();
+                }
+
+                gameEngine.player.character.style.left = gameEngine.controles.iterator + "px";
+            },
+
+            onStop: function (e) {
+                gameEngine.player.character.removeAttribute('class');
+                gameEngine.player.stop();
             }
-            self.controles.player = player;
-            
-            document.addEventListener("keydown", self.controles.onAction);
-            document.addEventListener("keyup", self.controles.onStop);
         },
 
-        onAction: function (e) {
+        player: {
+            character: {
 
-            if (e.keyCode == self.controles.left) {
-                self.controles.iterator += self.controles.speed;
-                self.player.character.style.transform = 'scale(1, 1)';
-                self.player.run();
-            }
+            },
 
-            if (e.keyCode == self.controles.right) {
-                self.controles.iterator -= self.controles.speed;
-                self.player.character.style.transform = 'scale(-1, 1)';
-                self.player.run();
+            sprites: {
+                path: location.protocol + '//' + location.host,
+                run: null,
+                stop: null,
+                jump: null
+            },
+
+            init: function (config) {
+                console.log(gameEngine.player);
+                gameEngine.player.character = document.getElementById(config.id);
+                gameEngine.player.sprites.run = config.run;
+                gameEngine.player.sprites.stop = config.stop;
+                gameEngine.player.sprites.jump = config.jump;
+            },
+
+            run: function () {
+                if (gameEngine.player.character.src != gameEngine.player.sprites.path + gameEngine.player.sprites.run) {
+                    gameEngine.player.character.src = gameEngine.player.sprites.run;
+                }
+            },
+
+            stop: function () {
+                gameEngine.player.character.src = gameEngine.player.sprites.stop;
+            },
+
+            jump: function () {
+                gameEngine.player.character.src = gameEngine.player.sprites.jump;
             }
-            self.player.character.style.left = self.controles.iterator + "px";
         },
 
-        onStop: function (e) {
-            self.player.stop();
+        level: {
+            getLevel: function (level) {
+
+            }
         }
-    };
-
-    self.player = {
-        character: {
-
-        },
-
-        sprites: {
-            path: location.protocol + '//' + location.host,
-            run: null,
-            stop: null,
-            jump: null
-        },
-
-        init: function (config) {
-            console.log(self.player);
-            self.player.character = document.getElementById(config.id);
-            self.player.sprites.run = config.run;
-            self.player.sprites.stop = config.stop;
-            self.player.sprites.jump = config.jump;
-        },
-
-        run: function () {
-            if (self.player.character.src != self.player.sprites.path + self.player.sprites.run) {
-                self.player.character.src = self.player.sprites.run;
-            }
-        },
-
-        stop: function () {
-            self.player.character.src = self.player.sprites.stop;
-        },
-
-        jump: function () {
-            self.player.character.src = self.player.sprites.jump;
-        }
-    };
-}
+    }
+    window.$game = gameEngine;
+})();
