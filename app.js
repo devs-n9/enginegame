@@ -9,6 +9,9 @@
         speed: 3
     });
     
+    $game.http.getRoutes({
+        level: 'levels/first.json'
+    })
     $game.level.start({
         world: 'game',
         components: [
@@ -17,3 +20,4 @@
             
         ]
     });
+

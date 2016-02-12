@@ -1,6 +1,28 @@
 "use strict";
 (function () {
     var gameEngine = {
+        http: {
+            routes: {
+                level: null
+            },
+            getRoutes: function(routes){
+                if(routes !== undefined){
+                    this.routes = routes;    
+                }
+            },
+            post: function (url, data, callback) {
+                var xhr = new XMLHttpRequest();
+                    xhr.open('POST', url, true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4) {
+                            if (xhr.status == 200) {
+                                callback(xhr.responseText);
+                            }
+                        }
+                    };
+                    xhr.send(data);
+            }
+        },
         controles: {
             left: 39,
             right: 37,
@@ -87,51 +109,39 @@
         level: {
             world: null,
             components: [],
-            start: function(config){
+            start: function (config) {
                 this.world = config.world;
                 this.components = config.components;
                 var level = this.getLevel(1);
                 this.createLevel(level);
             },
             getLevel: function (level) {
-                return [
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
-                    [0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-                ];
+                 gameEngine.http.post(gameEngine.http.routes.level, { level_id: 1}, function(data){
+                    return data;
+                });
             },
-            createLevel: function(level){
+            createLevel: function (level) {
                 var item = null;
                 var world = document.getElementById(gameEngine.level.world);
-                
-                for(var x = 0; x < level.length; x++){
+
+                for (var x = 0; x < level.length; x++) {
                     var broken = document.createElement('div');
-                    
-                    for(var y = 0; y < level[x].length; y++){
-                        
+
+                    for (var y = 0; y < level[x].length; y++) {
+
                         item = document.createElement('div');
                         item.setAttribute('class', 'item');
                         item.style.backgroundColor = "red";
                         world.appendChild(item);
-                        item.style.backgroundImage = "url("+this.components[level[x][y]].img+")";
+                        item.style.backgroundImage = "url(" + this.components[level[x][y]].img + ")";
                         console.log(this.components[level[x][y]], level[x][y]);
                     }
-                    
+
                     broken.style.clear = "both";
                     world.appendChild(broken);
                 }
             }
-            
+
         }
     }
     window.$game = gameEngine;
