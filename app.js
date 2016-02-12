@@ -1,15 +1,19 @@
     $game.player.init({
         id: "player",
-        run: "/images/run.gif",
-        stop: "/images/stay.png",
-        jump: "/images/jump.gif"
+        run: "/images/giphy.gif",
+        stop: "/images/stay_nyan.png",
+        jump: "/images/stay_nyan.png"
     });
 
     $game.controles.init($game.player, {
-        speed: 4
+        speed: 3
     });
     
     $game.level.start({
         world: 'game',
-        components: []
+        components: [
+            { img: '/images/sky.jpg', visible: 0 },
+            { img: '/images/wall.jpg', visible: 1 }
+            
+        ]
     });

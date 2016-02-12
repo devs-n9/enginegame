@@ -1,3 +1,4 @@
+"use strict";
 (function () {
     var gameEngine = {
         controles: {
@@ -10,7 +11,6 @@
 
             init: function (player, config) {
                 for (var param in config) {
-                    console.log(config);
                     if (config[param] !== undefined) {
                         gameEngine.controles[param] = config[param];
                     }
@@ -95,10 +95,19 @@
             },
             getLevel: function (level) {
                 return [
-                    [0, 0, 0, 1, 0, 2],
-                    [0, 0, 0, 1, 0, 2],
-                    [0, 0, 1, 1, 0, 2],
-                    [0, 2, 2, 1, 0, 2]
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
+                    [0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
                 ];
             },
             createLevel: function(level){
@@ -106,20 +115,20 @@
                 var world = document.getElementById(gameEngine.level.world);
                 
                 for(var x = 0; x < level.length; x++){
+                    var broken = document.createElement('div');
+                    
                     for(var y = 0; y < level[x].length; y++){
-                        console.log(level[x].length, y + 1);
                         
                         item = document.createElement('div');
                         item.setAttribute('class', 'item');
                         item.style.backgroundColor = "red";
                         world.appendChild(item);
-                        
-                        if(level[x].length == y + 1){
-                            
-                            item.style.clear = "both";
-                        }
-//                        level.components[level[x][y]];
+                        item.style.backgroundImage = "url("+this.components[level[x][y]].img+")";
+                        console.log(this.components[level[x][y]], level[x][y]);
                     }
+                    
+                    broken.style.clear = "both";
+                    world.appendChild(broken);
                 }
             }
             
